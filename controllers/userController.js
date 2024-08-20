@@ -13,8 +13,8 @@ module.exports = {
     if (!match) {
       return res.status(401).send({ message: 'Wrong Credentials' });
     }
-    const token = jwt.sign({ userId: user._id, name: user.name }, process.env.SECRET, { expiresIn: '1h' });
-    res.send({ token, user });
+    const token = jwt.sign({ userId: user._id, name: user.name }, process.env.SECRET, { expiresIn: '6h' });
+    res.send({ token, user: user.name });
   },
 
   async register(req, res) {
@@ -26,8 +26,8 @@ module.exports = {
     const hashedPassword = await bcrypt.hash(password, 15);
     const newUser = new User({ name, password: hashedPassword });
     const savedUser = await newUser.save();
-    const token = jwt.sign({ userId: savedUser._id, name: savedUser.name }, process.env.SECRET, { expiresIn: '1h' });
-    res.send({ token, user: savedUser });
+    const token = jwt.sign({ userId: savedUser._id, name: savedUser.name }, process.env.SECRET, { expiresIn: '6h' });
+    res.send({ token, user: savedUser.name });
   },
 
   async forgotPassword(req, res) {
@@ -36,7 +36,7 @@ module.exports = {
     if (!user) {
       return res.status(404).send({ message: 'User Not Found' });
     }
-    const token = jwt.sign({ userId: user._id, name: user.name }, process.env.SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id, name: user.name }, process.env.SECRET, { expiresIn: '6h' });
     res.send({ token });
   },
 
